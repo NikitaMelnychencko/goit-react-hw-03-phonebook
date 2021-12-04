@@ -10,12 +10,7 @@ import { nanoid } from 'nanoid';
 
 class App extends Component {
   state = {
-    contacts: [
-      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-    ],
+    contacts: [],
     filter: '',
   };
   formSubmitHandler = data => {
@@ -47,11 +42,24 @@ class App extends Component {
     }));
   };
   filterContacts = () => {
+    console.log('111');
     const normalizeFilter = this.state.filter.toLowerCase();
     return this.state.contacts.filter(contact =>
       contact.name.toLowerCase().includes(normalizeFilter),
     );
   };
+  componentDidMount() {
+    const contact = localStorage.getItem('contacts');
+    const parseContact = JSON.parse(contact);
+    if (parseContact) {
+      this.setState({ contacts: parseContact });
+    }
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevProps.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
   render() {
     const filterContact = this.filterContacts();
     return (
