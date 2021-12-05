@@ -18,16 +18,16 @@ class App extends Component {
       elem.name.includes(data.name),
     );
 
-    if (isUniqueName) {
-      const myAlert = alert({
-        title: 'Alert',
-        text: `${isUniqueName.name} is already in contacts`,
-      });
-    } else {
+    if (!isUniqueName) {
       const userId = { id: nanoid() };
       this.setState(prevState => ({
         contacts: [...prevState.contacts, { ...userId, ...data }],
       }));
+    } else {
+      const myAlert = alert({
+        title: 'Alert',
+        text: `${isUniqueName.name} is already in contacts`,
+      });
     }
   };
   handleChange = e => {
